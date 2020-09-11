@@ -32,5 +32,6 @@ services:
 
     App\MagicLink\MagicLoginLinkHandler:
         arguments:
+            $storage: '@App\Repository\MagicLoginTokenRepository'
             $routeName: 'magic_link_verify'
             $routeParams: []

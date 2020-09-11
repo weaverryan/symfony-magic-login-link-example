@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\MagicLoginTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\AuthenticatableToken\AuthenticatableTokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=MagicLoginTokenRepository::class)
  */
-class MagicLoginToken
+class MagicLoginToken implements AuthenticatableTokenInterface
 {
     /**
      * @ORM\Id
@@ -83,7 +85,7 @@ class MagicLoginToken
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }

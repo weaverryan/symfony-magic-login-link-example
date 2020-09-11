@@ -3,6 +3,7 @@
 namespace App\MagicLink;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\AuthenticatableToken\AuthenticatableTokenStorageInterface;
 
 class MagicLoginLinkHandler
 {
@@ -14,7 +15,7 @@ class MagicLoginLinkHandler
     private $routeName;
     private $routeParams;
 
-    public function __construct(AuthenticatableTokenDoctrineStorage $storage, UrlGeneratorInterface $urlGenerator, string $routeName, array $routeParams)
+    public function __construct(AuthenticatableTokenStorageInterface $storage, UrlGeneratorInterface $urlGenerator, string $routeName, array $routeParams)
     {
         $this->secret = 'TODO';
         $this->storage = $storage;
@@ -31,14 +32,12 @@ class MagicLoginLinkHandler
         $verifier = $this->generateRandomString(18);
         $expiresAt = new \DateTimeImmutable('+1 hour');
 
-        $authenticatableToken = new AuthenticatableToken(
+        $this->storage->storeToken(
             $selector,
             $this->hashVerifier($verifier),
             $user,
             $expiresAt
         );
-
-        $this->storage->storeToken($authenticatableToken);
 
         $params = $this->routeParams;
         $params['token'] = $selector.$verifier;
@@ -74,7 +73,7 @@ class MagicLoginLinkHandler
             return null;
         }
 
-        if ($token->isExpired()) {
+        if ($token->getExpiresAt()->getTimestamp() <= \time()) {
             // todo - maybe throw a specific exception
             return null;
         }
