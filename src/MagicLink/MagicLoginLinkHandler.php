@@ -32,7 +32,7 @@ class MagicLoginLinkHandler
         $this->storage->storeToken($selector, $hashedVerifier, $user, $expiresAt);
 
         $params = $this->routeParams;
-        $params['token'] = $hashedVerifier;
+        $params['token'] = $selector.$verifier;
         $url = $this->urlGenerator->generate(
             $this->routeName,
             $params,
@@ -45,6 +45,6 @@ class MagicLoginLinkHandler
 
     private function generateRandomString(int $bytes): string
     {
-        return strtr(base64_encode(random_bytes(32)), '+/', '-_');
+        return strtr(base64_encode(random_bytes($bytes)), '+/', '-_');
     }
 }
