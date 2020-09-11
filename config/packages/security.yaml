@@ -17,7 +17,7 @@ security:
             provider: app_user_provider
             logout: true
             custom_authenticators:
-                - App\MagicLink\MagicLinkAuthenticator
+                - Symfony\Component\Security\Http\Authenticator\MagicLinkAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
