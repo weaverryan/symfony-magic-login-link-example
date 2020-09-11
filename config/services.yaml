@@ -36,5 +36,3 @@ services:
             $secret: '%kernel.secret%'
             $routeName: 'magic_link_verify'
             $routeParams: []
-
-    Symfony\Component\Security\Http\Authenticator\MagicLinkAuthenticator: ~

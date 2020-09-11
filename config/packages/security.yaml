@@ -16,8 +16,9 @@ security:
             lazy: true
             provider: app_user_provider
             logout: true
-            custom_authenticators:
-                - Symfony\Component\Security\Http\Authenticator\MagicLinkAuthenticator
+            magic_link:
+                login_path: 'magic_link_login'
+                check_path: 'magic_link_verify'
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
