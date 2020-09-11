@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\MagicLink\MagicLoginLinkHandler;
+use App\Repository\UserRepository;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,12 +14,19 @@ class MagicLinkLoginController extends AbstractController
     /**
      * @Route("/login")
      */
-    public function requestMagicLink(Request $request, MagicLoginLinkHandler $magicLoginLinkHandler)
+    public function requestMagicLink(Request $request, MagicLoginLinkHandler $magicLoginLinkHandler, UserRepository $userRepository)
     {
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
 
-            $magicLoginLinkHandler->createLink(new \stdClass());
+            $user = $userRepository->findOneBy(['email' => $email]);
+
+            // todo - timing attack here
+            if ($user) {
+                $url = $magicLoginLinkHandler->createLoginUrl($user);
+
+                dump($url);
+            }
 
             return $this->redirectToRoute('magic_link_check_email');
         }
