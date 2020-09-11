@@ -93,6 +93,9 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
+    "nikic/php-parser": {
+        "version": "v4.9.1"
+    },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
     },
@@ -222,6 +225,15 @@
     },
     "symfony/http-kernel": {
         "version": "v5.1.5"
+    },
+    "symfony/maker-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
     },
     "symfony/monolog-bridge": {
         "version": "v5.1.5"

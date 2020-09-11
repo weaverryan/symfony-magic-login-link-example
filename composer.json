@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "symfony/debug-bundle": "^5.1",
+        "symfony/maker-bundle": "^1.21",
         "symfony/monolog-bundle": "^3.0",
         "symfony/var-dumper": "^5.1"
     },
