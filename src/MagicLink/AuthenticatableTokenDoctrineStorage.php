@@ -2,10 +2,10 @@
 
 namespace App\MagicLink;
 
-class MagicLinkDoctrineStorage
+class AuthenticatableTokenDoctrineStorage
 {
-    public function storeMagicLinkToken(string $selector, string $hashedVerifier, object $user, \DateTimeInterface $expiresAt)
+    public function storeToken(string $selector, string $hashedVerifier, object $user, \DateTimeInterface $expiresAt)
     {
-         
+
     }
 }
