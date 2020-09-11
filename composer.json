@@ -12,6 +12,9 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "symfony/debug-bundle": "^5.1",
+        "symfony/monolog-bundle": "^3.0",
+        "symfony/var-dumper": "^5.1"
     },
     "config": {
         "optimize-autoloader": true,
