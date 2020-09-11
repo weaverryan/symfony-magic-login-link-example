@@ -58,14 +58,14 @@ class MagicLoginToken
         $this->hashedVerifier = $hashedToken;
     }
 
+    public function getSelector()
+    {
+        return $this->selector;
+    }
+
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    public function isExpired(): bool
-    {
-        return $this->expiresAt->getTimestamp() <= \time();
     }
 
     public function getExpiresAt(): \DateTimeInterface

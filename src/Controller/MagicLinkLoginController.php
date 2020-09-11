@@ -8,13 +8,15 @@ use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class MagicLinkLoginController extends AbstractController
 {
     /**
-     * @Route("/login")
+     * @Route("/login", name="magic_link_login")
      */
-    public function requestMagicLink(Request $request, MagicLoginLinkHandler $magicLoginLinkHandler, UserRepository $userRepository)
+    public function requestMagicLink(Request $request, MagicLoginLinkHandler $magicLoginLinkHandler, UserRepository $userRepository, AuthenticationUtils $authenticationUtils)
     {
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
@@ -31,7 +33,9 @@ class MagicLinkLoginController extends AbstractController
             return $this->redirectToRoute('magic_link_check_email');
         }
 
-        return $this->render('magic_link/login.html.twig');
+        return $this->render('magic_link/login.html.twig', [
+            'error' => $authenticationUtils->getLastAuthenticationError()
+        ]);
     }
 
     /**

@@ -3,6 +3,10 @@
 {% block body %}
     <h1>Login with your email!</h1>
 
+    {% if error %}
+        <h3>ERROR: {{ error.messageKey }}</h3>
+    {% endif %}
+
     <form method="POST">
         <input type="email" name="email">
 

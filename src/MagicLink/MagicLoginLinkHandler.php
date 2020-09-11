@@ -6,6 +6,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MagicLoginLinkHandler
 {
+    private const SELECTOR_LENGTH = 20;
+
     private $secret;
     private $storage;
     private $urlGenerator;
@@ -24,12 +26,19 @@ class MagicLoginLinkHandler
     // maybe allow route params here or the expiresAt
     public function createLoginUrl(object $user): string
     {
+        // length will be 20
         $selector = $this->generateRandomString(15);
         $verifier = $this->generateRandomString(18);
-        $hashedVerifier = \hash_hmac('sha256', $verifier, $this->secret);
         $expiresAt = new \DateTimeImmutable('+1 hour');
 
-        $this->storage->storeToken($selector, $hashedVerifier, $user, $expiresAt);
+        $authenticatableToken = new AuthenticatableToken(
+            $selector,
+            $this->hashVerifier($verifier),
+            $user,
+            $expiresAt
+        );
+
+        $this->storage->storeToken($authenticatableToken);
 
         $params = $this->routeParams;
         $params['token'] = $selector.$verifier;
@@ -46,5 +55,35 @@ class MagicLoginLinkHandler
     private function generateRandomString(int $bytes): string
     {
         return strtr(base64_encode(random_bytes($bytes)), '+/', '-_');
+    }
+
+    public function consumeToken(string $token): ?object
+    {
+        $selector = \substr($token, 0, self::SELECTOR_LENGTH);
+        $verifier = \substr($token, self::SELECTOR_LENGTH);
+        $hashedVerifier = $this->hashVerifier($verifier);
+
+        $token = $this->storage->findToken($selector);
+        // immediately invalidate, even if the verifier is wrong
+        $this->storage->invalidateToken($selector);
+
+        $storedVerifier = $token ? $token->getHashedVerifier() : 'fake_verifier';
+
+        if (false === \hash_equals($hashedVerifier, $storedVerifier)) {
+            // todo - maybe throw a specific exception
+            return null;
+        }
+
+        if ($token->isExpired()) {
+            // todo - maybe throw a specific exception
+            return null;
+        }
+
+        return $token->getUser();
+    }
+
+    private function hashVerifier(string $verifier): string
+    {
+        return \hash_hmac('sha256', $verifier, $this->secret);
     }
 }
