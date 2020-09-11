@@ -14,16 +14,17 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\MagicLink\MagicLoginLinkHelper;
 
 class MagicLinkAuthenticator extends AbstractAuthenticator
 {
-    private $magicLoginLinkHandler;
+    private $magicLoginLinkHelper;
     private $httpUtils;
     private $options;
 
-    public function __construct(MagicLoginLinkHandler $magicLoginLinkHandler, HttpUtils $httpUtils)
+    public function __construct(MagicLoginLinkHelper $magicLoginLinkHelper, HttpUtils $httpUtils)
     {
-        $this->magicLoginLinkHandler = $magicLoginLinkHandler;
+        $this->magicLoginLinkHelper = $magicLoginLinkHelper;
         $this->httpUtils = $httpUtils;
 
         $this->options = [
@@ -43,7 +44,7 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
         return new SelfValidatingPassport(
             new UserBadge($token, function($token) {
-                $user = $this->magicLoginLinkHandler
+                $user = $this->magicLoginLinkHelper
                     ->consumeToken($token);
 
                 if (!$user) {
