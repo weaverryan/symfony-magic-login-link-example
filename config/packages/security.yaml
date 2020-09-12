@@ -17,9 +17,9 @@ security:
             provider: app_user_provider
             logout: true
             magic_link:
+                check_route: 'magic_link_verify'
                 login_path: 'magic_link_login'
-                check_path: 'magic_link_verify'
-
+                storage_service: App\Repository\MagicLoginTokenRepository
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

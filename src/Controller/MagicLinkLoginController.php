@@ -7,15 +7,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Http\MagicLink\MagicLinkHelper;
-use Symfony\Component\Security\Http\MagicLink\MagicLoginLinkHelper;
+use Symfony\Component\Security\Http\MagicLink\MagicLoginLinkerInterface;
 
 class MagicLinkLoginController extends AbstractController
 {
     /**
      * @Route("/login", name="magic_link_login")
      */
-    public function requestMagicLink(Request $request, MagicLoginLinkHelper $magicLoginLinkHelper, UserRepository $userRepository, AuthenticationUtils $authenticationUtils)
+    public function requestMagicLink(Request $request, MagicLoginLinkerInterface $magicLoginLinker, UserRepository $userRepository, AuthenticationUtils $authenticationUtils)
     {
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
@@ -24,7 +23,7 @@ class MagicLinkLoginController extends AbstractController
 
             // todo - timing attack here
             if ($user) {
-                $magicLink = $magicLoginLinkHelper->createMagicLink($user);
+                $magicLink = $magicLoginLinker->createMagicLink($user);
 
                 dump($magicLink->getUrl());
             }
