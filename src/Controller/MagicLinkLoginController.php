@@ -21,10 +21,10 @@ class MagicLinkLoginController extends AbstractController
 
             $user = $userRepository->findOneBy(['email' => $email]);
 
-            // todo - timing attack here
             if ($user) {
                 $magicLink = $magicLoginLinker->createMagicLink($user);
 
+                // TODO: in a real app, use notifier to email this
                 dump($magicLink->getUrl());
             }
 
