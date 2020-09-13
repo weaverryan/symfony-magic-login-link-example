@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MagicLoginTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Security\MagicLink\MagicLoginLinkTokenEntityTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\MagicLink\StoredMagicLinkTokenInterface;
 
@@ -12,32 +13,14 @@ use Symfony\Component\Security\Http\MagicLink\StoredMagicLinkTokenInterface;
  */
 class MagicLoginToken implements StoredMagicLinkTokenInterface
 {
+    use MagicLoginLinkTokenEntityTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $selector;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $hashedVerifier;
-
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
-    private $expiresAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -50,34 +33,6 @@ class MagicLoginToken implements StoredMagicLinkTokenInterface
         $this->user = $user;
 
         $this->initialize($expiresAt, $selector, $hashedVerifier);
-    }
-
-    private function initialize(\DateTimeInterface $expiresAt, string $selector, string $hashedToken)
-    {
-        $this->createdAt = new \DateTimeImmutable('now');
-        $this->expiresAt = $expiresAt;
-        $this->selector = $selector;
-        $this->hashedVerifier = $hashedToken;
-    }
-
-    public function getSelector()
-    {
-        return $this->selector;
-    }
-
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function getExpiresAt(): \DateTimeInterface
-    {
-        return $this->expiresAt;
-    }
-
-    public function getHashedVerifier(): string
-    {
-        return $this->hashedVerifier;
     }
 
     public function getId(): ?int
