@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use App\Repository\MagicLoginTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\AuthenticatableToken\AuthenticatableTokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\MagicLink\StoredMagicLinkTokenInterface;
 
 /**
  * @ORM\Entity(repositoryClass=MagicLoginTokenRepository::class)
  */
-class MagicLoginToken implements AuthenticatableTokenInterface
+class MagicLoginToken implements StoredMagicLinkTokenInterface
 {
     /**
      * @ORM\Id
