@@ -18,8 +18,10 @@ security:
             logout: true
             magic_link:
                 check_route: 'magic_link_verify'
-                login_path: 'magic_link_login'
-                storage_service: App\Repository\MagicLoginTokenRepository
+                user_email_property: 'email'
+                user_entity_class: App\Entity\User
+                max_uses: 3
+                used_link_cache: cache.app
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
