@@ -16,10 +16,9 @@ security:
             lazy: true
             provider: app_user_provider
             logout: true
-            magic_link:
+            login_link:
                 check_route: 'magic_link_verify'
-                user_email_property: 'email'
-                user_entity_class: App\Entity\User
+                signature_properties: [id, password]
                 max_uses: 3
                 used_link_cache: cache.app
             # activate different ways to authenticate
